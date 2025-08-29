@@ -1,0 +1,6 @@
+thresholds:
+  distance: 0.6  # Euclidean distance for face match (from paper)
+  confidence: 0.9  # Minimum confidence for detection
+
+images:
+  folder: "images/"  # Path to your test images folder
