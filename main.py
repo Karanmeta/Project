@@ -1,12 +1,19 @@
 import cv2
 import yaml
 import time
+import pickle   # <-- for saving model
 from recognize import load_embeddings, recognize_from_image
 
 with open('config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 
 index, ids = load_embeddings()
+
+# ✅ Save model (index + ids) as pkl
+with open("model.pkl", "wb") as f:
+    pickle.dump((index, ids), f)
+
+print("✅ Model (embeddings + IDs) saved as model.pkl")
 
 # Initialize camera (0 for default webcam; replace with IP URL if needed)
 cap = cv2.VideoCapture(0)
@@ -38,7 +45,8 @@ while True:
             
             # Label name and accuracy (distance as proxy)
             label = f"{user_id} (Acc: {1 - dist:.2f})"  # Accuracy as 1 - normalized dist (higher better)
-            cv2.putText(frame, label, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+            cv2.putText(frame, label, (left, top - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
     
     # Display the frame with annotations
     cv2.imshow('Real-Time Attendance Analysis', frame)
